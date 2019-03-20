@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:padding="20dp"
     android:id="@+id/card_relative_layout">
 
@@ -15,18 +15,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/dad_picture"
-                android:src="@mipmap/ic_launcher"/>
+            <!--<de.hdodenhof.circleimageview.CircleImageView-->
+                <!--android:layout_width="75dp"-->
+                <!--android:layout_height="75dp"-->
+                <!--android:id="@+id/dad_picture"-->
+                <!--android:src="@drawable/father"-->
+                <!--/>-->
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:src="@drawable/father"
+                android:id="@+id/dad_picture"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/test"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="10dp"
+                android:id="@+id/the_joke"/>
 
         </LinearLayout>
 

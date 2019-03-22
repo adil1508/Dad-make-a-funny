@@ -1,11 +1,14 @@
 package com.example.dadmakeafunny;
 
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.ImageView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -26,6 +29,27 @@ public class MainActivity extends AppCompatActivity {
 
         initRecyclerView();
 
+        initButtons();
+
+    }
+
+
+    private void initButtons(){
+        Button button = findViewById(R.id.button1);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Button 1 pressed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        button = findViewById(R.id.button2);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Button 2 pressed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initJokes(){

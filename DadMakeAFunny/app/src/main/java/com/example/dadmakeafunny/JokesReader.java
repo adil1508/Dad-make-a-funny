@@ -93,7 +93,7 @@ public class JokesReader {
 
 
 //class to deal with android not running network on main thread.
-class JokeGetterTask extends AsyncTask<String, Void, String>{
+class JokeGetterTask extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... strings) {
 
@@ -107,7 +107,7 @@ class JokeGetterTask extends AsyncTask<String, Void, String>{
             //setting user-agent to prevent rate-limiting.
             connection.setRequestProperty("User-Agent", "Dad-make-a-funny v1.0");
             response = connection.getInputStream();
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e("sendGet()", "Connection error: " + e.toString());
         }
 
@@ -116,14 +116,15 @@ class JokeGetterTask extends AsyncTask<String, Void, String>{
         String tmp;
         BufferedReader br = new BufferedReader(new InputStreamReader(response));
         try {
-            while( (tmp = br.readLine()) != null){
+            while ((tmp = br.readLine()) != null) {
                 result += tmp + "\n";
             }
             br.close();
             return result;
-        }catch (IOException e) {
+        } catch (IOException e) {
             Log.d("readConnection()", e.toString());
             return null;
         }
     }
 }
+

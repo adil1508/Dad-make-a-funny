@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
+    RecyclerViewAdapter adapter;
+
     // vars
     private ArrayList<String> jokes = new ArrayList<>();
 
@@ -36,28 +38,38 @@ public class MainActivity extends AppCompatActivity {
 
     private void initButtons(){
         Button button = findViewById(R.id.button1);
+
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Create a toast menu item
                 Toast.makeText(MainActivity.this, "Button 1 pressed", Toast.LENGTH_SHORT).show();
+
+                // Add an item to the recycler view
+                adapter.addAndNotify("Testing Button 1");
+
             }
         });
+
+
 
         button = findViewById(R.id.button2);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Create a toast menu item
                 Toast.makeText(MainActivity.this, "Button 2 pressed", Toast.LENGTH_SHORT).show();
+
+                // Add an item to the recycler view
+                adapter.addAndNotify("Testing Button 2");
             }
         });
     }
 
+    // currently doesn't do anything but i feel we might need it for later
     private void initJokes(){
-        jokes.add("This be jokes");
-        jokes.add("This be jokes 1");
-        jokes.add("This be jokes");
-        jokes.add("This be jokes");
-        jokes.add("This be jokes");
+
     }
 
     private void initRecyclerView(){
@@ -65,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.Recycler_View);
 
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, jokes);
+        adapter = new RecyclerViewAdapter(this, jokes);
 
         recyclerView.setAdapter(adapter);
 

@@ -24,7 +24,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private static final String TAG = "RecyclerViewAdapter";
 
-    private ArrayList<String> jokes = new ArrayList<>();
+    private ArrayList<String> jokes;
     private Context context;
 
     public RecyclerViewAdapter(Context context, ArrayList<String> jokes) {
@@ -33,6 +33,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.context = context;
     }
 
+
+    /*
+    * Required overrides
+    */
 
     //  Inflates the actual item
     @NonNull
@@ -64,8 +68,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public int getItemCount() {
         Log.d(TAG, "getItemCount: jokes size: " + jokes.size());
-        return 5;
+        return jokes.size();
     }
+
+    /*
+    *   Public exposed functionality
+    */
+    public void addAndNotify(String added){
+        jokes.add(added);
+        notifyDataSetChanged();
+    }
+
+
+    /*
+    * Getters
+    */
+    public ArrayList<String> getJokes(){
+        return jokes;
+    }
+
+    /*
+     * Setters
+     */
+
 
     // 'Holds' a single CardView
     public class ViewHolder extends RecyclerView.ViewHolder {

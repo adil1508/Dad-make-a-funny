@@ -32,19 +32,6 @@ public class JokesReader {
     }
 
 
-    /*starts the connection to subreddit and pulls in first 20 jokes*/
-
-    public void startConnection(){
-        try {
-            this.url = createUrl();
-            String data = new JokeGetterTask().execute(this.url).get();
-            this.pullJokes(data);
-        }catch (Exception e){
-            Log.e("error",e.toString());
-        }
-    }
-
-
 
     //create a url based on if accessing first time or new access
     private String createUrl(){
@@ -62,7 +49,7 @@ public class JokesReader {
             JSONObject raw_data = new JSONObject(data).getJSONObject("data");
             JSONArray children = raw_data.getJSONArray("children");
             this.last_joke_id = raw_data.getString("after");
-            for (int i = 0; i < children.length(); i++){
+            for (int i = 0; i < children.length(); i++) {
                 JSONObject current_json = children.getJSONObject(i).getJSONObject("data");
 
                 Joke curr_joke = new Joke();
@@ -77,7 +64,6 @@ public class JokesReader {
         }
     }
 
-
     //just here to make easier to use later.
     public void refreshJokes(){
         this.startConnection();
@@ -87,7 +73,6 @@ public class JokesReader {
     public ArrayList<Joke> getJokes(){
         return this.jokes;
     }
-
 
 }
 

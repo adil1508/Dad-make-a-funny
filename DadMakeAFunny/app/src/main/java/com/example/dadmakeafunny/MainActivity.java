@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     // vars
     private ArrayList<String> jokes = new ArrayList<>();
+    private JokesReader jokeController = new JokesReader();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,11 @@ public class MainActivity extends AppCompatActivity {
 
     // currently doesn't do anything but i feel we might need it for later
     private void initJokes(){
-
+        jokeController.startConnection();
+        ArrayList<Joke> jokeList = jokeController.getJokes();
+        for(int i =0; i < jokeList.size(); i++){
+            jokes.add(jokeList.get(i).getTitle());
+        }
     }
 
     private void initRecyclerView(){

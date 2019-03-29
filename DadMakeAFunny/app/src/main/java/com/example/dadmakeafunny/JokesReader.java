@@ -9,13 +9,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
 
 public class JokesReader {
 /* class opens connection to reddit and handles all jokes */
-    
+
     private String url;
     private ArrayList<Joke> jokes;
     private String last_joke_id;
@@ -34,21 +35,27 @@ public class JokesReader {
 
     public void startConnection(){
         this.url = createUrl();
-        InputStream connection = this.sendGet(url);
-        String data = this.readConnection(connection);
+        InputStream response = this.sendGet(url);
+        String data = this.readConnection(response);
         this.pullJokes(data);
     }
 
 
     //returns an InputStream from the URL
     private InputStream sendGet(String url){
-        InputStream connection = null;
+        InputStream response = null;
         try {
-            connection = new URL(url).openStream();
+            HttpURLConnection connection = (HttpURLConnection) new URL(this.url).openConnection();
+            connection.setRequestProperty("User-Agent", "Dad-make-a-funny v1.0");
+            response = connection.getInputStream();
         }catch (Exception e){
-            Log.e("sendGet()", "Connection error" + e.toString());
+            Log.e("sendGet()", "Connection error: " + e.toString());
         }
-        return connection;
+
+        //response is being returned as null. android.os.NetworkOnMainThreadException getting this
+        //currently reading up on this and how to fix it. Its an android issue.
+
+        return response;
     }
 
 
@@ -63,10 +70,10 @@ public class JokesReader {
     }
 
     //return contents of connection as a string
-    private String readConnection(InputStream connection){
+    private String readConnection(InputStream response){
         String result = "";
         String tmp;
-        BufferedReader br = new BufferedReader(new InputStreamReader(connection));
+        BufferedReader br = new BufferedReader(new InputStreamReader(response));
         try {
             while( (tmp = br.readLine()) != null){
                 result += tmp + "\n";

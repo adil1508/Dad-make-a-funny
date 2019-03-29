@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 public class JokesReader {
 /* class opens connection to reddit and handles all jokes */
+    
     private String url;
     private ArrayList<Joke> jokes;
     private String last_joke_id;
@@ -78,24 +79,36 @@ public class JokesReader {
         }
     }
 
+    //coverts to JSON and read jokes from it
     private void pullJokes(String data) {
-        return;
+        try {
+            JSONObject raw_data = new JSONObject(data).getJSONObject("data");
+            JSONArray children = raw_data.getJSONArray("children");
+            this.last_joke_id = raw_data.getString("after");
+            for (int i = 0; i < children.length(); i++){
+                JSONObject current_json = children.getJSONObject(i).getJSONObject("data");
+
+                Joke curr_joke = new Joke();
+                curr_joke.setTitle(current_json.optString("title"));
+                curr_joke.setLink(current_json.optString("url"));
+                //this might be null
+                curr_joke.setText(current_json.optString("selftext"));
+                this.jokes.add(curr_joke);
+            }
+        } catch (JSONException e) {
+            Log.d("pullJokes()", e.toString());
+        }
     }
 
-    public ArrayList<Joke> refreshJokes(){
-        //will get more jokes, after the current ones
+
+    //just here to make easier to use later.
+    public void refreshJokes(){
+        this.startConnection();
     }
 
     public ArrayList<Joke> getJokes(){
         return this.jokes;
     }
-
-    /*functions left to write
-        convert to JSON
-        read JSON
-        create jokes
-        possibly will change desgin of readConnection
-     */
 
 
 }

@@ -49,7 +49,7 @@ public class Joke {
     public String title;
     public String text;
 
-    public Joke(String title, String text, String after){
+    public Joke(String title, String text){
         this.title = title;
         this.text = text;
     }

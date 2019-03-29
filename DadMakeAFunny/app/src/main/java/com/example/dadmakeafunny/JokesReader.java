@@ -1,5 +1,6 @@
 package com.example.dadmakeafunny;
 import android.os.AsyncTask;
+import android.os.NetworkOnMainThreadException;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -32,6 +33,14 @@ public class JokesReader {
     }
 
 
+    /*starts the connection to subreddit and pulls in first 20 jokes*/
+
+    public void startConnection(){
+        this.url = createUrl();
+        InputStream response = this.sendGet(url);
+        String data = this.readConnection(response);
+        this.pullJokes(data);
+    }
 
     //create a url based on if accessing first time or new access
     private String createUrl(){
@@ -42,6 +51,7 @@ public class JokesReader {
             return (this.BASE_URL + "?after=" + this.last_joke_id + this.LIMIT_FLAG + this.limit);
         }
     }
+    
 
     //coverts to JSON and read jokes from it
     private void pullJokes(String data) {

@@ -64,6 +64,7 @@ public class JokesReader {
         }
     }
 
+
     //just here to make easier to use later.
     public void refreshJokes(){
         this.startConnection();

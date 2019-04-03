@@ -1,6 +1,7 @@
 package com.example.dadmakeafunny;
 
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -70,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // currently doesn't do anything but i feel we might need it for later
     private void initJokes(){
         jokeController.startConnection();
         ArrayList<Joke> jokeList = jokeController.getJokes();

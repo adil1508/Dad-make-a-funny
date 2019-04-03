@@ -9,8 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import java.util.ArrayList;
+import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,14 +45,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Create a toast menu item
-                Toast.makeText(MainActivity.this, "Button 1 pressed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Button 1 pressed: ADDED", Toast.LENGTH_SHORT).show();
 
                 // Add an item to the recycler view
                 adapter.addAndNotify("Testing Button 1");
+                RecyclerView rc = findViewById(R.id.Recycler_View);
+                rc.scrollToPosition(adapter.getItemCount() - 1);
 
             }
         });
-
 
 
         button = findViewById(R.id.button2);
@@ -59,10 +61,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Create a toast menu item
-                Toast.makeText(MainActivity.this, "Button 2 pressed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Button 2 pressed: DELETED", Toast.LENGTH_SHORT).show();
 
                 // Add an item to the recycler view
-                adapter.addAndNotify("Testing Button 2");
+                adapter.removeAndNotify();
             }
         });
     }
@@ -77,11 +79,14 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.Recycler_View);
 
+        // set Animator for items (3rd-party)
+        recyclerView.setItemAnimator(new LandingAnimator());
+
         adapter = new RecyclerViewAdapter(this, jokes);
 
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(new SlideInBottomAnimationAdapter(adapter));
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager( new LinearLayoutManager(this));
     }
 
 }

@@ -14,11 +14,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
@@ -75,9 +73,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     *   Public exposed functionality
     */
     public void addAndNotify(String added){
-        jokes.add(added);
-        notifyDataSetChanged();
+        jokes.add(jokes.size(),added);
+        notifyItemInserted(jokes.size());
     }
+
+    public void removeAndNotify(){
+        // safety check
+        if (jokes.size() > 0){
+            int index = jokes.size() - 1;
+            jokes.remove(index);
+            notifyItemRemoved(index);
+        }
+    }
+
 
 
     /*

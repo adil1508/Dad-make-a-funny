@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+    //currently sets title of Joke object to jokes array list
     private void initJokes(){
         jokeController.startConnection();
         ArrayList<Joke> jokeList = jokeController.getJokes();

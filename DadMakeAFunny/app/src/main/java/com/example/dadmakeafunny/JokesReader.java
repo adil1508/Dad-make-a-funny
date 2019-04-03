@@ -1,6 +1,9 @@
 package com.example.dadmakeafunny;
 import android.os.AsyncTask;
-import android.os.NetworkOnMainThreadException;
+import android.util.Log;
+
+import java.io.InputStream;
+import java.util.ArrayList;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -36,10 +39,13 @@ public class JokesReader {
     /*starts the connection to subreddit and pulls in first 20 jokes*/
 
     public void startConnection(){
-        this.url = createUrl();
-        InputStream response = this.sendGet(url);
-        String data = this.readConnection(response);
-        this.pullJokes(data);
+        try {
+            this.url = createUrl();
+            String data = new JokeGetterTask().execute(this.url).get();
+            this.pullJokes(data);
+        }catch (Exception e){
+            Log.e("error",e.toString());
+        }
     }
 
     //create a url based on if accessing first time or new access
@@ -51,7 +57,6 @@ public class JokesReader {
             return (this.BASE_URL + "?after=" + this.last_joke_id + this.LIMIT_FLAG + this.limit);
         }
     }
-    
 
     //coverts to JSON and read jokes from it
     private void pullJokes(String data) {
@@ -89,7 +94,7 @@ public class JokesReader {
 
 
 //class to deal with android not running network on main thread.
-class JokeGetterTask extends AsyncTask<String, Void, String> {
+class JokeGetterTask extends AsyncTask<String, Void, String>{
     @Override
     protected String doInBackground(String... strings) {
 
@@ -103,7 +108,7 @@ class JokeGetterTask extends AsyncTask<String, Void, String> {
             //setting user-agent to prevent rate-limiting.
             connection.setRequestProperty("User-Agent", "Dad-make-a-funny v1.0");
             response = connection.getInputStream();
-        } catch (Exception e) {
+        }catch (Exception e){
             Log.e("sendGet()", "Connection error: " + e.toString());
         }
 
@@ -112,15 +117,14 @@ class JokeGetterTask extends AsyncTask<String, Void, String> {
         String tmp;
         BufferedReader br = new BufferedReader(new InputStreamReader(response));
         try {
-            while ((tmp = br.readLine()) != null) {
+            while( (tmp = br.readLine()) != null){
                 result += tmp + "\n";
             }
             br.close();
             return result;
-        } catch (IOException e) {
+        }catch (IOException e) {
             Log.d("readConnection()", e.toString());
             return null;
         }
     }
 }
-

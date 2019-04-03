@@ -1,4 +1,5 @@
 package com.example.dadmakeafunny;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -34,29 +35,15 @@ public class JokesReader {
     /*starts the connection to subreddit and pulls in first 20 jokes*/
 
     public void startConnection(){
-        this.url = createUrl();
-        InputStream response = this.sendGet(url);
-        String data = this.readConnection(response);
-        this.pullJokes(data);
-    }
-
-
-    //returns an InputStream from the URL
-    private InputStream sendGet(String url){
-        InputStream response = null;
         try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(this.url).openConnection();
-            connection.setRequestProperty("User-Agent", "Dad-make-a-funny v1.0");
-            response = connection.getInputStream();
+            this.url = createUrl();
+            String data = new JokeGetterTask().execute(this.url).get();
+            this.pullJokes(data);
         }catch (Exception e){
-            Log.e("sendGet()", "Connection error: " + e.toString());
+            Log.e("error",e.toString());
         }
-
-        //response is being returned as null. android.os.NetworkOnMainThreadException getting this
-        //currently reading up on this and how to fix it. Its an android issue.
-
-        return response;
     }
+
 
 
     //create a url based on if accessing first time or new access
@@ -66,23 +53,6 @@ public class JokesReader {
         }
         else{
             return (this.BASE_URL + "?after=" + this.last_joke_id + this.LIMIT_FLAG + this.limit);
-        }
-    }
-
-    //return contents of connection as a string
-    private String readConnection(InputStream response){
-        String result = "";
-        String tmp;
-        BufferedReader br = new BufferedReader(new InputStreamReader(response));
-        try {
-            while( (tmp = br.readLine()) != null){
-                result += tmp + "\n";
-            }
-            br.close();
-            return result;
-        }catch (IOException e){
-            Log.d("readConnection()", e.toString());
-            return null;
         }
     }
 
@@ -113,9 +83,47 @@ public class JokesReader {
         this.startConnection();
     }
 
+    //getter for jokes
     public ArrayList<Joke> getJokes(){
         return this.jokes;
     }
 
 
+}
+
+
+//class to deal with android not running network on main thread.
+class JokeGetterTask extends AsyncTask<String, Void, String>{
+    @Override
+    protected String doInBackground(String... strings) {
+
+        String url = strings[0];
+
+        //Send get request and open an input stream
+        InputStream response = null;
+        try {
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+
+            //setting user-agent to prevent rate-limiting.
+            connection.setRequestProperty("User-Agent", "Dad-make-a-funny v1.0");
+            response = connection.getInputStream();
+        }catch (Exception e){
+            Log.e("sendGet()", "Connection error: " + e.toString());
+        }
+
+        //read results from InputStream
+        String result = "";
+        String tmp;
+        BufferedReader br = new BufferedReader(new InputStreamReader(response));
+        try {
+            while( (tmp = br.readLine()) != null){
+                result += tmp + "\n";
+            }
+            br.close();
+            return result;
+        }catch (IOException e) {
+            Log.d("readConnection()", e.toString());
+            return null;
+        }
+    }
 }

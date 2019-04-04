@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         jokeController.startConnection();
         ArrayList<Joke> jokeList = jokeController.getJokes();
         for(int i =0; i < jokeList.size(); i++){
-            jokes.add(jokeList.get(i).getTitle());
+            jokes.add(jokeList.get(i).getTitle() + "\n" + jokeList.get(i).getText());
         }
     }
 

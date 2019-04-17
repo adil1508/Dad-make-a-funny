@@ -33,6 +33,10 @@ public class JokesReader {
         this.last_joke_id = null;
     }
 
+    public  JokesReader(ArrayList<Joke> jokes){
+        this.jokes = jokes;
+        this.last_joke_id = null;
+    }
 
     /*starts the connection to subreddit and pulls in first 20 jokes*/
 
@@ -65,22 +69,14 @@ public class JokesReader {
             for (int i = 0; i < children.length(); i++) {
                 JSONObject current_json = children.getJSONObject(i).getJSONObject("data");
 
-                Joke curr_joke = new Joke();
-                curr_joke.setTitle(current_json.optString("title"));
-                curr_joke.setLink(current_json.optString("url"));
-                //this might be null
-                curr_joke.setText(current_json.optString("selftext"));
+                Joke curr_joke = new Joke(current_json.optString("title"),
+                        current_json.optString("selftext"),
+                        current_json.optString("url"));
                 this.jokes.add(curr_joke);
             }
         } catch (JSONException e) {
             Log.d("pullJokes()", e.toString());
         }
-    }
-
-
-    //just here to make easier to use later.
-    public void refreshJokes(){
-        this.startConnection();
     }
 
     //getter for jokes

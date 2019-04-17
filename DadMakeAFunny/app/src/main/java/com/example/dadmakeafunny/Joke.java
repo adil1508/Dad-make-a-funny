@@ -16,6 +16,12 @@ public class Joke {
         this.link = null;
     }
 
+    public Joke(String title, String text, String link){
+        this.title = title;
+        this.text = text;
+        this.link = link;
+    }
+
     //getters and setters
 
     public String getTitle() {

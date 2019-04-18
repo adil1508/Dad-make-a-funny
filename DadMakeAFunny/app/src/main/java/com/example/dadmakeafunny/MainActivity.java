@@ -30,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: started");
 
-        initJokes();
-
         initRecyclerView();
+
+        initJokes();
 
         initButtons();
 
@@ -49,8 +49,12 @@ public class MainActivity extends AppCompatActivity {
                 // Create a toast menu item
                 Toast.makeText(MainActivity.this, "Button 1 pressed: ADDED", Toast.LENGTH_SHORT).show();
 
+                if (jokes.size() <= 0){
+                    initJokes();
+                }
+
                 // Add an item to the recycler view
-                adapter.addAndNotify("Testing Button 1");
+                adapter.addAndNotify(jokes.remove(0));
                 RecyclerView rc = findViewById(R.id.Recycler_View);
                 rc.scrollToPosition(adapter.getItemCount() - 1);
 
@@ -89,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         // set Animator for items (3rd-party)
         recyclerView.setItemAnimator(new LandingAnimator());
 
-        adapter = new RecyclerViewAdapter(this, jokes);
+        adapter = new RecyclerViewAdapter(this, new ArrayList<String>());
 
         recyclerView.setAdapter(new SlideInBottomAnimationAdapter(adapter));
 

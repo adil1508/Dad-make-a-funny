@@ -112,7 +112,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             super(itemView);
 
             cardView = itemView.findViewById(R.id.joke_card);
-            dadPicture = itemView.findViewById(R.id.dad_picture);
+//            dadPicture = itemView.findViewById(R.id.dad_picture);
             theJoke = itemView.findViewById(R.id.the_joke);
             relLayout = itemView.findViewById(R.id.card_relative_layout);
         }

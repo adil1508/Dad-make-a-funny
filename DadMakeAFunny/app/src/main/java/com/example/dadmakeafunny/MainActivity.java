@@ -2,6 +2,7 @@ package com.example.dadmakeafunny;
 
 
 import android.os.AsyncTask;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import java.util.ArrayList;
+import java.util.Locale;
+
 import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
@@ -19,9 +22,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     RecyclerViewAdapter adapter;
+    TextToSpeech tl;
 
     // vars
-    private ArrayList<String> jokes = new ArrayList<>();
+    private ArrayList<Joke> jokes = new ArrayList<>();
     private JokesReader jokeController = new JokesReader();
 
     @Override
@@ -36,6 +40,15 @@ public class MainActivity extends AppCompatActivity {
 
         initButtons();
 
+        tl = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status != TextToSpeech.ERROR){
+                    tl.setLanguage(Locale.UK);
+                }
+            }
+        });
+
     }
 
 
@@ -47,16 +60,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Create a toast menu item
-                Toast.makeText(MainActivity.this, "Button 1 pressed: ADDED", Toast.LENGTH_SHORT).show();
 
                 if (jokes.size() <= 0){
                     initJokes();
                 }
 
                 // Add an item to the recycler view
-                adapter.addAndNotify(jokes.remove(0));
+                Joke joke = jokes.remove(0);
+                adapter.addAndNotify(joke.toString());
                 RecyclerView rc = findViewById(R.id.Recycler_View);
                 rc.scrollToPosition(adapter.getItemCount() - 1);
+
+                tl.speak((CharSequence)joke.getTitle(), TextToSpeech.QUEUE_FLUSH, null, "title");
+                tl.playSilentUtterance(25, TextToSpeech.QUEUE_ADD, "silence");
+                tl.speak(joke.getText(), TextToSpeech.QUEUE_ADD, null, "text");
+
 
             }
         });
@@ -67,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Create a toast menu item
-                Toast.makeText(MainActivity.this, "Button 2 pressed: DELETED", Toast.LENGTH_SHORT).show();
-
                 // Add an item to the recycler view
                 adapter.removeAndNotify();
             }
@@ -79,10 +95,7 @@ public class MainActivity extends AppCompatActivity {
     //currently sets title of Joke object to jokes array list
     private void initJokes(){
         jokeController.startConnection();
-        ArrayList<Joke> jokeList = jokeController.getJokes();
-        for(int i =0; i < jokeList.size(); i++){
-            jokes.add(jokeList.get(i).getTitle() + "\n" + jokeList.get(i).getText());
-        }
+        jokes = jokeController.getJokes();
     }
 
     private void initRecyclerView(){

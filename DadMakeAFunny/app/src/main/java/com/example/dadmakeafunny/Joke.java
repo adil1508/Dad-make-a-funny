@@ -4,6 +4,7 @@ package com.example.dadmakeafunny;
 Joke class containing all the jokes as strings
  */
 
+
 public class Joke {
 
     private String title;
@@ -48,5 +49,8 @@ public class Joke {
         this.link = link;
     }
 
-
+    @Override
+    public String toString() {
+        return title + "\n" + text;
+    }
 }

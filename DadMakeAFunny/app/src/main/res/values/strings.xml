@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Dad, Make A Funny</string>
     <string name="test">Test Text</string>
+    <string name="dad">dad</string>
 </resources>

@@ -29,7 +29,7 @@ public class JokesReader {
 
     /*constructor*/
     public JokesReader(){
-        this.jokes = new ArrayList<>();
+        this.jokes = new ArrayList<>(this.limit);
         this.last_joke_id = null;
     }
 
